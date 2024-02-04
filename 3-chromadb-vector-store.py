@@ -1,3 +1,9 @@
+'''
+    before you run this script, make sure chromadb is started (in the docker container); run:
+
+    docker run -d -p 8000:8000 chromadb/chroma (using docker)
+'''
+
 import os
 
 # load all env vars from dotenv config
