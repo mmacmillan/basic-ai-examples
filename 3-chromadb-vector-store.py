@@ -24,19 +24,13 @@ split_docs = char_splitter.split_documents(docs)
 #    print(i.page_content +'\n')
 
 # generate vectors for the chunked page content
-embeddings = HuggingFaceEmbeddings(model_name='all-MiniLM-L12-v2')
+model = HuggingFaceEmbeddings(model_name='all-MiniLM-L12-v2')
 
-# generate embeddings manually from the split documents
-# embed_documents expects an array of strings, not Documents (their text is in .page_content)
-#split_docs_content = [doc.page_content for doc in split_docs]
-#doc_vectors = embeddings.embed_documents(split_docs_content)
-
-# create a chroma instance from the set of documents; pass the embedding function
-# so it generates vectors for us
-db = Chroma.from_documents(split_docs, embeddings)
+# create a chroma instance from the set of documents; pass the embedding function so it generates vectors for us
+db = Chroma.from_documents(split_docs, model)
 
 # perform a semantic search on the query provided, finding the most relevant documents
 print('quering for documents related to the 2nd amendment')
-
 results = db.similarity_search('which amendment discusses the right to bear arms')
+
 print(results)
