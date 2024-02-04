@@ -30,7 +30,7 @@ console.log('crawling each page');
 
 //** follow each and parse the headers and content from the page
 let docs = []
-for(const link of links.slice(0, 2)) {
+for(const link of links.slice(0, 10)) {
     let doc = await parsePage(link);
     if(!!doc.pageContent)
         docs.push(doc);
@@ -55,7 +55,7 @@ const store = new Chroma(model, { collectionName: 'news' });
 await store.addDocuments(splitDocs);
 
 //** perform a sematic search against the vector store
-const results = await store.similaritySearch('oracle');
+const results = await store.similaritySearch('what tool was released for troubleshooting a kubernetes network configuration');
 console.log(results);
 
 await browser.close();
