@@ -10,6 +10,7 @@ import { Chroma } from '@langchain/community/vectorstores/chroma';
 
 import puppeteer from 'puppeteer';
 import dotenv from 'dotenv';
+dotenv.config();
 
 const browser = await puppeteer.launch({ headless: 'true' });
 console.log('starting crawl');
@@ -67,6 +68,8 @@ function parsePage(link) {
             headers: [],
             content: []
         }
+
+        console.log('crawling', link);
 
         //** create and navigate to a new page
         let linkPage = await browser.newPage();
