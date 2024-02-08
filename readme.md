@@ -39,5 +39,7 @@ You can run this against a cluster, or a single-node OpenSearch (development) in
 docker run -d -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" opensearchproject/opensearch:2.11.1
 ```
 
+You will need to swap out the IDs used by the different postman requests, such as the model ids, model group ids, ingestion pipeline ids, etc.  You can grab each ID from the step previous to it being necessary as you run each step.
+
 Note: the default security is `Basic Auth` with admin:admin as the username/password.
 
