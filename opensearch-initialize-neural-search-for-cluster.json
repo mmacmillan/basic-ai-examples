@@ -1,0 +1,451 @@
+{
+	"info": {
+		"_postman_id": "c25c905c-76e0-4e5a-8745-18b2f77d2c50",
+		"name": "OpenSearch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21599187"
+	},
+	"item": [
+		{
+			"name": "0-test-cluster-connectivity",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{openSearchUrl}}/_cluster/health",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"_cluster",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1-prereqs",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"persistent\": {\n    \"plugins\": {\n      \"ml_commons\": {\n        \"only_run_on_ml_node\": \"false\",\n        \"model_access_control_enabled\": \"true\",\n        \"native_memory_threshold\": \"99\"\n      }\n    }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{openSearchUrl}}/_cluster/settings",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"_cluster",
+						"settings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2-register-model-group",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"NLP_model_group\",\n  \"description\": \"A model group for NLP models\",\n  \"access_mode\": \"public\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{openSearchUrl}}/_plugins/_ml/model_groups/_register",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"_plugins",
+						"_ml",
+						"model_groups",
+						"_register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3-get-model-groups",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": {\n        \"match_all\": {}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{openSearchUrl}}/_plugins/_ml/model_groups/_search",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"_plugins",
+						"_ml",
+						"model_groups",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4-register-model",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"huggingface/sentence-transformers/msmarco-distilbert-base-tas-b\",\n  \"version\": \"1.0.1\",\n  \"model_group_id\": \"0OrchY0Bdt51sUc4qyUx\",\n  \"model_format\": \"TORCH_SCRIPT\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{openSearchUrl}}/_plugins/_ml/models/_register",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"_plugins",
+						"_ml",
+						"models",
+						"_register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5-check-status-of-model-registration",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{openSearchUrl}}/_plugins/_ml/tasks/0urghY0Bdt51sUc46iVA",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"_plugins",
+						"_ml",
+						"tasks",
+						"0urghY0Bdt51sUc46iVA"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6-get-models",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": {\n        \"match_all\": {}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{openSearchUrl}}/_plugins/_ml/models/_search",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"_plugins",
+						"_ml",
+						"models",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7-get-model-info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{openSearchUrl}}/_plugins/_ml/models/0-rghY0Bdt51sUc46yWR",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"_plugins",
+						"_ml",
+						"models",
+						"0-rghY0Bdt51sUc46yWR"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8-deploy-model",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{openSearchUrl}}/_plugins/_ml/models/0-rghY0Bdt51sUc46yWR/_deploy",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"_plugins",
+						"_ml",
+						"models",
+						"0-rghY0Bdt51sUc46yWR",
+						"_deploy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9-check-status-of-deployed-model",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{openSearchUrl}}/_plugins/_ml/tasks/2OrmhY0Bdt51sUc4RSVi",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"_plugins",
+						"_ml",
+						"tasks",
+						"2OrmhY0Bdt51sUc4RSVi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10-create-ingest-pipeline",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"test ingestion pipeline for creating embeddings\",\n    \"processors\": [\n    {\n        \"text_embedding\": {\n            \"model_id\": \"0-rghY0Bdt51sUc46yWR\",\n            \"field_map\": {\n                \"text\": \"text-embedding\"\n            }\n        }\n    }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{openSearchUrl}}/_ingest/pipeline/test-pipeline",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"_ingest",
+						"pipeline",
+						"test-pipeline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "11-create-test-index",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"settings\": {\n    \"index.knn\": true,\n    \"default_pipeline\": \"test-pipeline\"\n  },\n  \"mappings\": {\n    \"properties\": {\n      \"id\": {\n        \"type\": \"text\"\n      },\n      \"text-embedding\": {\n        \"type\": \"knn_vector\",\n        \"dimension\": 768,\n        \"method\": {          \n          \"name\": \"hnsw\"\n        }\n      },\n      \"text\": {\n        \"type\": \"text\"\n      }\n    }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{openSearchUrl}}/test-index",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"test-index"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12-create-test-doc",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"test-document-1.pdf\",\n    \"text\": \"this document summarizes an RFI sent to ABC Corp from the ACME Corp asking for information about using neural/semantic search with OpenSearch\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{openSearchUrl}}/test-index/_doc",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"test-index",
+						"_doc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "13-test-lexical-search",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": {\n        \"match_all\": {}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{openSearchUrl}}/test-index/_search",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"test-index",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "14-test-neural-search",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"_source\": {\n        \"excludes\": [\"text-embedding\"]\n    },\n    \"query\": {\n        \"neural\": {\n            \"text-embedding\": {\n                \"query_text\": \"using neural search\",\n                \"model_id\": \"0-rghY0Bdt51sUc46yWR\",\n                \"k\": 5\n            }\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{openSearchUrl}}/test-index/_search",
+					"host": [
+						"{{openSearchUrl}}"
+					],
+					"path": [
+						"test-index",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{password}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{username}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "openSearchUrl",
+			"value": "https://129.213.135.110:9200",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "admin",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "admin",
+			"type": "string"
+		}
+	]
+}
